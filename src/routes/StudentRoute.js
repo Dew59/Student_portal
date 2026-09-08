@@ -1,7 +1,7 @@
-const express = require('express');
-const {createStudent, getSingleStudentData, deleteStudent, updateStudent} = require('../controllers/studentsController')
-const {registerStudentSchema, updateStudentSchma} = require('../validator/studentValidator')
-const validate = require('../middlewares/validate')
+import express from 'express';
+import {createStudent, getSingleStudentData, deleteStudent, updateStudent} from '../controllers/studentsController.js'
+import {registerStudentSchema, updateStudentSchema} from '../validator/studentValidator.js'
+import validate from '../middlewares/validate.js'
 
 
 const router = express.Router();
@@ -9,6 +9,6 @@ const router = express.Router();
 router.post('/student-signup', validate(registerStudentSchema), createStudent)
 router.get('/get-student/:id', getSingleStudentData)
 router.delete('/delete-student/:id', deleteStudent)
-router.patch('/update-student/:id', validate(updateStudentSchma), updateStudent)
+router.patch('/update-student/:id', validate(updateStudentSchema), updateStudent)
 
-module.exports = router;
+export default router;

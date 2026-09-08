@@ -1,6 +1,6 @@
-const express = require('express');
-const globalErorrHandler = require('./middlewares/errHAndler')
-const studentRoute = require('./routes/StudentRoute')
+import express from 'express'
+import globalErrorHandler from './middlewares/errHandler.js';
+import studentRoute from './routes/studentRoute.js'
 
 const app = express();
 
@@ -12,6 +12,6 @@ app.get('/', (req, res) => {
 
 app.use('/api/v1/auth', studentRoute)
 
-app.use(globalErorrHandler)
+app.use(globalErrorHandler)
 
-module.exports = app
+export default app;

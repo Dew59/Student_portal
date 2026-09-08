@@ -1,6 +1,6 @@
-const { z } = require('zod');
+import { z } from 'zod'
 
-const registerStudentSchema = z.object({
+export const registerStudentSchema = z.object({
     name: z.string()
     .trim()
     .min(12, "Make use of your full name")
@@ -15,11 +15,9 @@ const registerStudentSchema = z.object({
     .min(8, "Use a complete registeration number")
 })
 
-const updateStudentSchma = z.object({
+export const updateStudentSchema = z.object({
     name: z.string()
     .trim()
     .toLowerCase()
     .min(12, "Make use of your full name")
 })
-
-module.exports = { registerStudentSchema, updateStudentSchma }

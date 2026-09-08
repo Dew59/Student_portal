@@ -1,7 +1,7 @@
-const Student = require('../models/studentsModel');
-const AppError = require('../middlewares/appError')
+import Student from '../models/studentsModel.js';
+import AppError from '../middlewares/appError.js'
 
-const createStudent = async (req, res, next) => {
+export const createStudent = async (req, res, next) => {
     try {
         const {name, email, password, registrationNumber } = req.validatedData
 
@@ -25,7 +25,7 @@ const createStudent = async (req, res, next) => {
     }
 }
 
-const getSingleStudentData = async (req, res, next) => {
+export const getSingleStudentData = async (req, res, next) => {
     try {
         const { id } = req.params
 
@@ -42,7 +42,7 @@ const getSingleStudentData = async (req, res, next) => {
     }
 }
 
-const deleteStudent = async (req, res, next) => {
+ export const deleteStudent = async (req, res, next) => {
     try {
        const { id } = req.params
 
@@ -60,7 +60,7 @@ const deleteStudent = async (req, res, next) => {
     }
 }
 
-const updateStudent = async (req,res, next) => {
+export const updateStudent = async (req,res, next) => {
     try {
       const { id }  = req.params
       const { name } = req.validatedData
@@ -79,5 +79,3 @@ const updateStudent = async (req,res, next) => {
         console.log('update student', error)
     }
 }
-
-module.exports = {createStudent, getSingleStudentData, deleteStudent, updateStudent}

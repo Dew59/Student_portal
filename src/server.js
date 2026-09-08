@@ -1,9 +1,9 @@
-const dotenv = require('dotenv');
+import dotenv from 'dotenv'
 dotenv.config();
 
 const port = 5000;
-const app = require('./app');
-const connectDb = require('./config/dbConfig');
+import app from './app.js'
+import connectDb from './config/dbConfig.js'
 
 const startServer = async () => {
     try {
