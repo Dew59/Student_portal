@@ -1,6 +1,6 @@
 import express from 'express'
-import globalErrorHandler from './middlewares/errHandler.js';
-import studentRoute from './routes/studentRoute.js'
+import globalErrorHandler from './middlewares/errHAndler.js';
+import studentRoute from './routes/studentRoutes.js'
 
 const app = express();
 
@@ -10,7 +10,7 @@ app.get('/', (req, res) => {
     res.send("Hello World")
 })
 
-app.use('/api/v1/auth', studentRoute)
+app.use('/api/v1/auth/student', studentRoute)
 
 app.use(globalErrorHandler)
 

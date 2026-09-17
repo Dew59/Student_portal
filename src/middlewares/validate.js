@@ -1,17 +1,19 @@
-const validate = (schema) => (req, res, next) => {
-    const result = schema.safeParse(req.body);
+import AppError from '../utils/appError.js'
 
-    if (!result.success) {
-        return res.status(400).json({
-            status: "fail",
-            message: "Validation failed",
-            errors: result.error.errors
-        });
+const validate = (schema) =>  {
+    return async (req, res, next) => {
+        try {
+            req.validatedData = await schema.parseAsync({
+                body: req.body,
+                params: req.params,
+                query: req.query,
+            })
+
+            next();
+        } catch (error) {
+            return next(new AppError(error.issues?.[0]?.message || "Validation failed", 400))
+        }
     }
-
-    req.validatedData = result.data;
-
-    next();
 };
 
 export default validate;

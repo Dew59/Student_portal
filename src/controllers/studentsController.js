@@ -1,81 +1,70 @@
 import Student from '../models/studentsModel.js';
-import AppError from '../middlewares/appError.js'
+import AppError from '../utils/appError.js'
+import asyncHandler from '../utils/asyncHanler.js'
 
-export const createStudent = async (req, res, next) => {
-    try {
-        const {name, email, password, registrationNumber } = req.validatedData
+export const createStudent = asyncHandler(async (req, res, next) => {
+    const { body: { name, email, password, registrationNumber }, } = req.validatedData
 
-        const studentExist = await Student.findOne({ email })
-        if(studentExist) return next( new AppError('Student already exist', 409))
-        const studentExist2 = await Student.findOne({ registrationNumber })
-        if(studentExist2) return next( new AppError('Student already exist', 409))
-        
-        const createdStudent = await Student.create({name, email, password, registrationNumber })
+    const studentExist = await Student.findOne({ email })
+    if (studentExist) return next(new AppError('Student already exist', 409))
+    const studentExist2 = await Student.findOne({ registrationNumber })
+    if (studentExist2) return next(new AppError('Student already exist', 409))
 
-        createdStudent.password = undefined;
+    const createdStudent = await Student.create({ name, email, password, registrationNumber })
 
-        res.status(201).json({
-            status: 'success',
-            message: 'student created successfully',
-            data: createdStudent
-        })
-    } catch (error) {
-        next(error)
-        console.log('student creation', error)
-    }
-}
+    createdStudent.password = undefined;
 
-export const getSingleStudentData = async (req, res, next) => {
-    try {
-        const { id } = req.params
+    res.status(201).json({
+        status: 'success',
+        message: 'student created successfully',
+        data: createdStudent
+    })
+})
 
-        const getSingle = await Student.findById(id)
-        if(!getSingle) return next(new AppError("Student not found", 404))
-        
-        return res.status(200).json({
-            status: 'success',
-            data: getSingle
-        })
-    } catch (error) {
-        next(error)
-        console.log('get student', error)
-    }
-}
+export const getStudentData = asyncHandler (async (req, res, next) => {
+    const students = await Student.find()
 
- export const deleteStudent = async (req, res, next) => {
-    try {
-       const { id } = req.params
+    res.status(200).json({
+        status: 'success',
+        data: students
+    })
+})
 
-       const deletedStudent = await Student.findByIdAndDelete(id)
-       if(!deletedStudent) return next(new AppError("Student not found", 404))
+export const getSingleStudentData = asyncHandler(async (req, res, next) => {
+    const { id } = req.params
 
-        return res.status(200).json({
-            status: 'success',
-            data: deletedStudent
-        })
+    const getSingle = await Student.findById(id)
+    if (!getSingle) return next(new AppError("Student not found", 404))
 
-    } catch (error) {
-        next(error)
-        console.log('delete student', error)
-    }
-}
+    return res.status(200).json({
+        status: 'success',
+        data: getSingle
+    })
+})
 
-export const updateStudent = async (req,res, next) => {
-    try {
-      const { id }  = req.params
-      const { name } = req.validatedData
+export const deleteStudent = asyncHandler(async (req, res, next) => {
+    const { id } = req.params
 
-      if(!name) return next(new AppError('Enter a valid name', 409))
+    const deletedStudent = await Student.findByIdAndDelete(id)
+    if (!deletedStudent) return next(new AppError("Student not found", 404))
 
-      const updatedStudent = await Student.findByIdAndUpdate(id, { name }, { new: true, runValidators: true})
-      if(!updatedStudent) return next(new AppError('Student not found', 404))
+    return res.status(200).json({
+        status: 'success',
+        data: deletedStudent
+    })
+})
 
-        return res.status(200).json({
-            status: 'success',
-            data: updatedStudent
-        })
-    } catch (error) {
-        next(error)
-        console.log('update student', error)
-    }
-}
+export const updateStudent = asyncHandler(async (req, res, next) => {
+    const { id } = req.params
+    const { body: { name } } = req.validatedData
+
+    if (!name) return next(new AppError('Enter a valid name', 409))
+
+    const updatedStudent = await Student.findByIdAndUpdate(id, { name }, { new: true, runValidators: true })
+    if (!updatedStudent) return next(new AppError('Student not found', 404))
+
+    return res.status(200).json({
+        status: 'success',
+        data: updatedStudent
+    })
+})
