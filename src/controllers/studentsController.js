@@ -21,7 +21,28 @@ export const createStudent = asyncHandler(async (req, res, next) => {
     })
 })
 
-export const getStudentData = asyncHandler (async (req, res, next) => {
+export const loginStudent = asyncHandler(async (req, res) => {
+    const { body: { registrationNumber, password } } = req.validatedData
+
+    const student = await Student.findOne({ registrationNumber, }).select('+password')
+    if (!student) {
+        throw new AppError('Invalid credentials', 401)
+    }
+
+    const isPasswordValid = await student.comparePassword(password)
+    if (!isPasswordValid) {
+        throw new AppError('Invalid credentials', 401)
+    }
+
+    student.password = undefined;
+
+    return res.status(200).json({
+        status: 'success',
+        data: student
+    })
+})
+
+export const getStudentData = asyncHandler(async (req, res, next) => {
     const students = await Student.find()
 
     res.status(200).json({

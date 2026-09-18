@@ -1,4 +1,4 @@
-import {Schema, model} from 'mongoose'
+import mongoose, {Schema, model} from 'mongoose'
 import bcrypt from 'bcrypt'
 
 const studentSchema = new Schema({
@@ -20,7 +20,13 @@ const studentSchema = new Schema({
     registrationNumber: {
         type: String,
         required: true,
-    }
+    },
+    products: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'product'
+        }
+    ]
 },{ timestamps: true, })
 
 studentSchema.pre("save", async function () {
@@ -28,6 +34,10 @@ studentSchema.pre("save", async function () {
 
     this.password = await bcrypt.hash(this.password, 12);
 })
+
+studentSchema.methods.comparePassword = async function (candidatePassword) {
+    return await bcrypt.compare(candidatePassword, this.password)
+}
 
 const Student = model("Student", studentSchema);
 

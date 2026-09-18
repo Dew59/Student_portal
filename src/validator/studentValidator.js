@@ -13,8 +13,18 @@ export const registerStudentSchema = z.object({
             .min(8, "Password must be at least 8 characters"),
         registrationNumber: z.string()
             .toUpperCase()
-            .min(8, "Use a complete registeration number")
+            .min(12, "Use a complete registeration number")
     }),
+});
+
+export const loginStudentSchema = z.object ({
+    body: z.object({
+        registrationNumber: z.string()
+        .toUpperCase()
+        .min(12, "Please provide a valid registration number"),
+        password: z.string()
+        .min(8, "Password must be at least 8 characters")
+    })
 })
 
 export const updateStudentSchema = z.object({
